@@ -1,0 +1,285 @@
+/* --- 1. 폰트 세팅 --- */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+@font-face { font-family: 'Heitz';        src: url('Heitz-Bold.otf')             format('opentype'); }
+@font-face { font-family: 'DiatypeBold'; src: url('ABCDiatype-Bold-Trial.otf') format('opentype'); }
+@font-face { font-family: 'DiatypeMedium'; src: url('ABCDiatype-Medium-Trial.otf') format('opentype'); }
+@font-face { font-family: 'DiatypeThin'; src: url('ABCDiatype-Thin-Trial.otf') format('opentype'); }
+@font-face { font-family: 'DiatypeRegular'; src: url('ABCDiatype-Regular-Trial.otf') format('opentype'); }
+
+
+#ui-header {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  pointer-events: none;
+}
+
+#ui-title {
+  font-family: 'DiatypeBold', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  color: #000;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+#ui-item-wrap {
+  font-family: 'DiatypeRegular', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: #000;
+  white-space: nowrap;
+  display: inline-block;
+  transform-origin: left top;
+  transform: rotate(33.5deg) translate(13px, -0.5px);
+  line-height: 1;
+  pointer-events: auto;
+}
+
+#ui-item-name { pointer-events: none; }
+
+#ui-print-btn {
+  cursor: pointer;
+  pointer-events: auto;
+}
+#ui-print-btn:hover { opacity: 0.4; }
+/* --- 2. 기본 리셋 --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'DiatypeLight', 'Pretendard', sans-serif;
+}
+
+
+
+
+/* --- 5. 3D 씬 --- */
+.scene {
+  width: 100vw;
+  height: 100vh;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  position: relative;
+  pointer-events: none;
+}
+
+.bg-lines {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1100px !important;  /* 💡 화면이 아무리 커도 무조건 1100 고정! */
+  height: 660px !important;  /* 💡 무조건 660 고정! */
+  transform: translate(-50%, -50%); 
+  pointer-events: none; 
+  z-index: 1; 
+}
+
+.room {
+  width: 1100px;
+  height: 660px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg);
+  pointer-events: none;
+}
+
+/* --- 6. 각 면 --- */
+/* back: 1100×660 / left·right: 660×660 / top·bottom: 1100×660 */
+.face {
+  position: absolute;
+  /* 💡 원래 있던 background: #ffffff; 와 border: 1px solid rgb... 코드를 지우고 아래 두 줄을 넣어! */
+  background: transparent; 
+  border: none; 
+  
+  overflow: hidden;
+  backface-visibility: hidden;
+  pointer-events: auto;
+}
+
+.face-back {
+  width: 1100px; height: 660px;
+  left: 0; top: 0;
+  transform: translateZ(-660px);
+}
+.face-left {
+  width: 660px; height: 660px;
+  left: 0; top: 0;
+  transform-origin: left center;
+  transform: rotateY(90deg);
+}
+.face-right {
+  width: 660px; height: 660px;
+  right: 0; top: 0;
+  transform-origin: right center;
+  transform: rotateY(-90deg);
+}
+.face-top {
+  width: 1100px; height: 660px;
+  left: 0; top: 0;
+  transform-origin: center top;
+  transform: rotateX(-90deg);
+}
+.face-bottom {
+  width: 1100px; height: 660px;
+  left: 0; bottom: 0;
+  transform-origin: center bottom;
+  transform: rotateX(90deg);
+}
+
+.bb {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  
+  /* 💡 원래 있던 border: 1.5px solid rgb... 코드를 지우고 아래 한 줄을 넣어! */
+  border: none; 
+  
+  background: transparent;
+  pointer-events: auto;
+}
+/* --- 7. 기초설비 박스 --- */
+.bb:hover { background: rgba(255, 255, 255, 0.03); }
+
+.bl {
+  font-family: 'DiatypeLight', sans-serif;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  color: #222;
+  pointer-events: none;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* --- 8. 추가설비 텍스트 --- */
+.extra-item {
+  position: absolute;
+  font-family: 'DiatypeLight', sans-serif;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  padding: 1px 3px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: auto;
+  transition: opacity 0.2s;
+}
+.extra-item:hover { background: rgba(0,0,0,0.04); }
+
+/* 물질 — 항상 보임 */
+.extra-item.material   { color: #000000; opacity: 1; }
+
+/* 비물질 — 호버링해야 보임 */
+.extra-item.immaterial { color: #000000; opacity: 0; pointer-events: none; }
+.face:hover .extra-item.immaterial { opacity: 1; pointer-events: auto; }
+
+/* --- 9. dynamic-zone (글+이미지 영역) --- */
+.dynamic-zone {
+  position: absolute;
+  z-index: 20;
+  overflow: hidden;
+  pointer-events: auto;
+  animation: fadeIn 0.35s ease-out forwards;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* zone 안 콘텐츠 */
+.zc {
+  padding: 28px 30px;
+  position: absolute;
+  left: 0; top: 0;
+  transform-origin: 0 0;
+}
+.zi {
+  width: 100%;
+  display: block;
+  filter: grayscale(100%);
+  margin-bottom: 16px;
+  transition: filter 0.3s;
+}
+.zi:hover { filter: grayscale(0%); }
+
+.zt {
+  font-family: 'DiatypeLight', sans-serif;
+  font-size: 23px;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  color: #000000;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+.zx {
+  font-family: 'DiatypeLight', sans-serif;
+  font-size: 23px;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  color: #000000;
+  white-space: pre-line;
+}
+
+@media print {
+  body > * { visibility: hidden; }
+
+  #print-clone { visibility: visible; }
+  #print-clone * { visibility: visible; }
+
+  #print-clone {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    background: white !important;
+    transform: none !important;
+    overflow: visible !important;
+    border: none !important;
+  }
+
+  #print-clone .zc {
+    position: static !important;
+    transform: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 28px 30px !important;
+  }
+
+  #print-clone .zc * {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  #print-clone .zt {
+    font-family: 'DiatypeLight', sans-serif !important;
+    font-size: 23px !important;
+    letter-spacing: -0.03em !important;
+    line-height: 1.3 !important;
+    color: #000 !important;
+    margin-bottom: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  #print-clone .zx {
+    font-family: 'DiatypeLight', sans-serif !important;
+    font-size: 23px !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.4 !important;
+    color: #000 !important;
+    white-space: pre-line !important;
+  }
+}

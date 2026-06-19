@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Wall - 3D Room Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="ui-header">
+        <span id="ui-title">EVENT WALLS</span>
+        <span id="ui-item-wrap">
+          <span id="ui-item-name"></span><span id="ui-print-btn" onclick="triggerPrint()"> — PRINT</span>
+        </span>
+      </div>
+    
+
+    <div class="scene">
+        <img src="roomlines.svg" class="bg-lines" alt="도면">
+        <div class="room">
+            <div class="face face-top" id="face-top"></div>
+            <div class="face face-left" id="face-left"></div>
+            <div class="face face-right" id="face-right"></div>
+            <div class="face face-back" id="face-back"></div>
+            <div class="face face-bottom" id="face-bottom"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+
+</html>
